@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="wangshangyao.bw.com.caiqiyi.MainActivity">
+
     <wangshangyao.bw.com.caiqiyi.banner.BannerView
         android:id="@+id/bannerView"
         android:layout_width="match_parent"
