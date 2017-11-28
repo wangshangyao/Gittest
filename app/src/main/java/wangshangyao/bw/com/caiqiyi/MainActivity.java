@@ -1,112 +1,61 @@
 package wangshangyao.bw.com.caiqiyi;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import wangshangyao.bw.com.caiqiyi.banner.BannerAdapter;
-import wangshangyao.bw.com.caiqiyi.banner.BannerBaseAdapter;
-import wangshangyao.bw.com.caiqiyi.banner.BannerBean;
-import wangshangyao.bw.com.caiqiyi.banner.BannerView;
+import wangshangyao.bw.com.caiqiyi.Adapter.Vp_adapter;
+import wangshangyao.bw.com.caiqiyi.BaseBean.MainBean;
+import wangshangyao.bw.com.caiqiyi.P.main_Present;
+import wangshangyao.bw.com.caiqiyi.V.IView;
+import wangshangyao.bw.com.caiqiyi.V.dkjc;
+import wangshangyao.bw.com.caiqiyi.V.dpqxk;
+import wangshangyao.bw.com.caiqiyi.V.dyzx;
+import wangshangyao.bw.com.caiqiyi.V.fr_Recommend;
+import wangshangyao.bw.com.caiqiyi.V.hlw;
+import wangshangyao.bw.com.caiqiyi.V.jctj;
+import wangshangyao.bw.com.caiqiyi.V.wdy;
+import wangshangyao.bw.com.caiqiyi.V.xgyx;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IView<MainBean> {
 
-    private BannerView bannerview;
-    private BannerAdapter mAdapter;
-    private List<BannerBean> datas = new ArrayList<>();
-    private Handler h = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            datas.clear();
+    private TabLayout tab;
+    private ViewPager vp;
 
-            String json = (String) msg.obj;
-            try {
-                JSONObject js = new JSONObject(json);
-                JSONArray data = js.getJSONArray("data");
-                for(int i=0;i<data.length();i++){
-                    JSONObject jo = data.getJSONObject(i);
-                    String title = jo.getString("title");
-                    String img = jo.getString("img");
-                    datas.add(new BannerBean(img,title));
-                }
-                mAdapter.setData(datas);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    };
+    private String[] b = new String[]{"推荐","大咖剧场","大片抢先看","电影资讯","好莱坞","精彩推荐","微电影","香港影视"};
+    private List<Fragment> arr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bannerview = (BannerView) findViewById(R.id.bannerView);
 
-        bannerview.setAdapter(mAdapter = new BannerAdapter(this));
+        arr = new ArrayList<>();
 
-        mAdapter.setOnPageTouchListener(new BannerBaseAdapter.OnPageTouchListener<BannerBean>() {
-            @Override
-            public void onPageClick(int position, BannerBean bannerBean) {
-                // 页面点击
-                Toast.makeText(MainActivity.this, bannerBean.title, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPageDown() {
-                // 按下，可以停止轮播
-                //   Toast.makeText(BannerActivity.this, "按下", Toast.LENGTH_SHORT).show();
-                bannerview.stopAutoScroll();
-            }
-
-            @Override
-            public void onPageUp() {
-                // 抬起开始轮播
-                //  Toast.makeText(BannerActivity.this, "抬起", Toast.LENGTH_SHORT).show();
-                bannerview.startAutoScroll();
-            }
-        });
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient ok = new OkHttpClient.Builder().build();
-                Request r = new Request.Builder()
-                        .url("http://www.yulin520.com/a2a/impressApi/news/mergeList?sign=C7548DE604BCB8A17592EFB9006F9265&pageSize=20&gender=2&ts=1871746850&page=1")
-                        .build();
-                Call call = ok.newCall(r);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.i("xx","失败啦");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Message msg = new Message();
-                        msg.obj = response.body().string();
-                        h.sendMessage(msg);
-                    }
-                });
-            }
-        }).start();
-
+        tab = (TabLayout) findViewById(R.id.tab);
+        vp = (ViewPager) findViewById(R.id.main_vp);
+        main_Present p = new main_Present(this);
+        p.relation();
     }
 
+    @Override
+    public void showView(List<MainBean> t) {
+
+        arr.add(new fr_Recommend(this,t.get(0)));
+        arr.add(new dkjc(this,t.get(0)));
+        arr.add(new dpqxk(this));
+        arr.add(new dyzx(this));
+        arr.add(new hlw(this));
+        arr.add(new jctj(this));
+        arr.add(new wdy(this));
+        arr.add(new xgyx(this));
+
+        vp.setAdapter(new Vp_adapter(getSupportFragmentManager(),arr,b));
+        tab.setupWithViewPager(vp);
+    }
 }
