@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    >
 
-    <wangshangyao.bw.com.caiqiyi.BaseView.banner.BannerView
+    <com.bw.yao.banner.BannerView
         android:id="@+id/bannerView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -16,9 +24,10 @@
         app:bannerAutoScroll="true"
         app:bannerScrollDuration="4000"
         app:bannerAnimDuration="1500"/>
-    <ListView
+    <wangshangyao.bw.com.caiqiyi.BaseView.MyListView
         android:id="@+id/lv"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"/>
 </LinearLayout>
+</ScrollView>

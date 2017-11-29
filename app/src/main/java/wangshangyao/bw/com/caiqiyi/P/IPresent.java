@@ -6,4 +6,5 @@ package wangshangyao.bw.com.caiqiyi.P;
 
 public interface IPresent {
     void relation();
+    void relation(String dataId);
 }

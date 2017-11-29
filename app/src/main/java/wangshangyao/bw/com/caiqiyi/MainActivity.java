@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements IView<MainBean> {
 
         tab = (TabLayout) findViewById(R.id.tab);
         vp = (ViewPager) findViewById(R.id.main_vp);
+
         main_Present p = new main_Present(this);
         p.relation();
     }

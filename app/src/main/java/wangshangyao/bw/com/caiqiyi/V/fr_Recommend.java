@@ -1,12 +1,14 @@
 package wangshangyao.bw.com.caiqiyi.V;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bw.yao.banner.BannerAdapter;
@@ -17,8 +19,10 @@ import com.bw.yao.banner.BannerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import wangshangyao.bw.com.caiqiyi.Adapter.Lv_adapter;
 import wangshangyao.bw.com.caiqiyi.BaseBean.MainBean;
 
+import wangshangyao.bw.com.caiqiyi.BaseView.MyListView;
 import wangshangyao.bw.com.caiqiyi.P.IPresent;
 import wangshangyao.bw.com.caiqiyi.R;
 
@@ -26,10 +30,11 @@ import wangshangyao.bw.com.caiqiyi.R;
  * Created by Administrator on 2017/11/27.
  */
 
-public class fr_Recommend extends Fragment implements IView<BannerBean>{
+public class fr_Recommend extends Fragment{
 
     private Context con;
     private MainBean b;
+    private MyListView lv;
 
     public fr_Recommend(Context con,MainBean b) {
         this.con = con;
@@ -38,7 +43,6 @@ public class fr_Recommend extends Fragment implements IView<BannerBean>{
 
     private BannerView bannerview;
     private BannerAdapter mAdapter;
-    private IPresent p;
 
     private List<BannerBean> arr;
 
@@ -49,12 +53,9 @@ public class fr_Recommend extends Fragment implements IView<BannerBean>{
 
         bannerview = v.findViewById(R.id.bannerView);
         bannerview.setAdapter(mAdapter = new BannerAdapter(con));
-
-        /*p = new recommend_Present(this);
-        p.relation();*/
-
+        lv = v.findViewById(R.id.lv);
+        lv.setAdapter(new Lv_adapter(getActivity(),b));
         onMyEvent();
-
         return v;
     }
 
@@ -69,12 +70,14 @@ public class fr_Recommend extends Fragment implements IView<BannerBean>{
         }
         mAdapter.setData(arr);
 
-
         mAdapter.setOnPageTouchListener(new BannerBaseAdapter.OnPageTouchListener<BannerBean>() {
             @Override
             public void onPageClick(int position, BannerBean bannerBean) {
                 // 页面点击
                 Toast.makeText(con, bannerBean.title, Toast.LENGTH_SHORT).show();
+                Intent it = new Intent(con,Details.class);
+                it.putExtra("dataId",b.getRet().getList().get(0).getChildList().get(position).getDataId());
+                startActivity(it);
             }
             @Override
             public void onPageDown() {
@@ -89,9 +92,5 @@ public class fr_Recommend extends Fragment implements IView<BannerBean>{
                 bannerview.startAutoScroll();
             }
         });
-    }
-
-    @Override
-    public void showView(List<BannerBean> t) {
     }
 }

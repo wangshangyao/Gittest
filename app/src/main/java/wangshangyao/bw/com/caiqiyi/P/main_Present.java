@@ -5,10 +5,8 @@ import java.util.List;
 
 import rx.Observer;
 import wangshangyao.bw.com.caiqiyi.BaseBean.MainBean;
-import wangshangyao.bw.com.caiqiyi.M.IModel;
 import wangshangyao.bw.com.caiqiyi.M.IModel2;
 import wangshangyao.bw.com.caiqiyi.M.main_Model;
-import wangshangyao.bw.com.caiqiyi.M.recommend_Model;
 import wangshangyao.bw.com.caiqiyi.V.IView;
 
 /**
@@ -44,5 +42,10 @@ public class main_Present implements IPresent {
                 v.showView(arr);
             }
         });
+    }
+
+    @Override
+    public void relation(String dataId) {
+
     }
 }
